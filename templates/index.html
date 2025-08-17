@@ -1,0 +1,45 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YOLOv8 Detector — Flask</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>YOLOv8 Object Detection</h1>
+    {% if not model_exists %}
+      <div class="banner">
+        ⚠️ Model not found at <code>{{ model_path }}</code>.<br>
+        Please upload your trained model to <code>{{ model_path }}</code> then redeploy.
+      </div>
+    {% endif %}
+
+    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data" class="card">
+      <label for="image" class="label">Upload Image</label>
+      <input type="file" id="image" name="image" accept="image/*" required />
+
+      <div class="row">
+        <div class="col">
+          <label for="conf" class="label">Confidence</label>
+          <input type="number" id="conf" name="conf" min="0" max="1" step="0.01" value="{{ conf_default }}">
+        </div>
+        <div class="col">
+          <label for="iou" class="label">IoU</label>
+          <input type="number" id="iou" name="iou" min="0" max="1" step="0.01" value="{{ iou_default }}">
+        </div>
+      </div>
+
+      <button type="submit" class="btn">Detect</button>
+    </form>
+
+    <div class="footer">
+      <a href="{{ url_for('health') }}" target="_blank">/health</a> ·
+      <a href="https://ultralytics.com/" target="_blank" rel="noopener">Ultralytics</a>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

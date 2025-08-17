@@ -1,0 +1,56 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Results — YOLOv8 Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Detection Result</h1>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Input</h2>
+        <img src="{{ input_image }}" class="image" alt="input">
+      </div>
+      <div class="card">
+        <h2>Annotated Output</h2>
+        <img src="{{ output_image }}" class="image" alt="output">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Detections</h2>
+      {% if detections and detections|length > 0 %}
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Label</th>
+              <th>Confidence</th>
+              <th>Box [x1, y1, x2, y2]</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in detections %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ d.label }}</td>
+                <td>{{ '%.3f'|format(d.confidence) }}</td>
+                <td>[{{ '%.0f'|format(d.box[0]) }}, {{ '%.0f'|format(d.box[1]) }}, {{ '%.0f'|format(d.box[2]) }}, {{ '%.0f'|format(d.box[3]) }}]</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No detections above thresholds (conf={{ conf }}, iou={{ iou }}).</p>
+      {% endif %}
+    </div>
+
+    <a class="btn" href="{{ url_for('index') }}">Try another image</a>
+  </div>
+</body>
+</html>

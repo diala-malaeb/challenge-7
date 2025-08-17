@@ -1,0 +1,11 @@
+
+services:
+  - type: web
+    name: yolo-flask
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: MODEL_PATH
+        value: models/best.pt
